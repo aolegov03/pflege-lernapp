@@ -8,11 +8,13 @@ export class ProgressView extends BaseView {
     const stack = this.stack();
     const overall = progress.getOverallProgress();
     const state = progress.getState();
+    const difficultyStats = progress.getDifficultyStats();
 
     stack.append(this.card([
       createElement('p', { className: 'eyebrow', text: 'Fortschritt' }),
       createElement('h2', { text: `${overall}% Gesamtfortschritt` }),
-createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch auf diesem Gerät gespeichert. Export/Import brauchst du nur, wenn du den Stand auf ein anderes Gerät übertragen oder zusätzlich sichern möchtest.' }),      this.progressBar(overall),
+      createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch auf diesem Gerät gespeichert. Export/Import brauchst du nur, wenn du den Stand auf ein anderes Gerät übertragen oder zusätzlich sichern möchtest.' }),
+      this.progressBar(overall),
       createElement('p', { className: 'notice', text: `Letzte Speicherung: ${formatDateTime(state.updatedAt)}` })
     ]));
 
@@ -31,6 +33,12 @@ createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch a
     stack.append(this.card([
       createElement('h3', { text: 'Themenstand' }),
       rows
+    ]));
+
+    stack.append(this.card([
+      createElement('h3', { text: 'Quiz nach Schwierigkeit' }),
+      createElement('p', { text: 'Hier siehst du, ob du nur Grundlagen kannst oder auch schwere/prüfungsnahe Fragen sicher beantwortest.' }),
+      this.renderDifficultyStats(difficultyStats)
     ]));
 
     const fileInput = createElement('input', {
@@ -52,7 +60,7 @@ createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch a
 
     stack.append(this.card([
       createElement('h3', { text: 'Backup' }),
-      createElement('p', { text: 'Mit Export/Import kannst du deinen Fortschritt zwischen iPhone und iPad übertragen oder sichern.' }),
+      createElement('p', { text: 'Der Fortschritt speichert sich automatisch. Mit Export/Import kannst du ihn zusätzlich sichern oder zwischen iPhone und iPad übertragen.' }),
       this.actions([
         this.button('Fortschritt exportieren', () => backup.exportProgress()),
         this.button('Alle Daten zurücksetzen', async () => {
@@ -72,5 +80,26 @@ createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch a
     ], 'card warning'));
 
     root.append(stack);
+  }
+
+  renderDifficultyStats(stats) {
+    const labels = {
+      leicht: 'Leicht',
+      mittel: 'Mittel',
+      schwer: 'Schwer',
+      pruefung: 'Prüfung'
+    };
+
+    return createElement('div', { className: 'difficulty-stats' }, Object.entries(labels).map(([key, label]) => {
+      const value = stats[key] ?? { correct: 0, total: 0, percent: 0 };
+      const text = value.total === 0
+        ? 'Noch keine Antworten'
+        : `${value.correct}/${value.total} richtig · ${value.percent}%`;
+
+      return createElement('div', { className: 'difficulty-stat-row' }, [
+        createElement('span', { className: `difficulty-badge difficulty-${key}`, text: label }),
+        createElement('strong', { text })
+      ]);
+    }));
   }
 }
