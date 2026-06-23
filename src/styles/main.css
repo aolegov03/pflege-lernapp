@@ -508,105 +508,27 @@ textarea {
     box-shadow: var(--shadow);
   }
 }
-/* Darkmode-Korrektur: helle Karten und unsichtbare Schrift beheben */
+/* FINALER DARKMODE-FIX: Themenstand-Kaesten sichtbar machen */
 @media (prefers-color-scheme: dark) {
-  .app-header {
-    background: rgba(15, 23, 42, 0.94);
-    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+  body .table-like .table-row,
+  body .card .table-like .table-row,
+  body section.card .table-like .table-row {
+    background: linear-gradient(180deg, #1b263b 0%, #151f32 100%) !important;
+    background-color: #151f32 !important;
+    color: #f8fafc !important;
+    border: 1px solid rgba(148, 163, 184, 0.24) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
   }
 
-  .app-header h1 {
-    color: #f8fafc;
+  body .table-like .table-row strong {
+    color: #f8fafc !important;
   }
 
-  .app-header .eyebrow {
-    color: #7dd3fc;
+  body .table-like .table-row .notice {
+    color: #cbd5e1 !important;
   }
 
-  .sync-pill {
-    background: #1e293b;
-    color: #60a5fa;
-  }
-
-  .table-row {
-    background: linear-gradient(180deg, #1b263b, #151f32);
-    color: #f8fafc;
-    border: 1px solid rgba(148, 163, 184, 0.22);
-  }
-
-  .table-row strong {
-    color: #f8fafc;
-  }
-
-  .table-row .notice {
-    color: #cbd5e1;
-  }
-
-  .notice {
-    color: #cbd5e1;
-  }
-
-  .progress-label {
-    color: #cbd5e1;
-  }
-
-  .tag {
-    background: rgba(125, 211, 252, 0.14);
-    color: #7dd3fc;
-    border: 1px solid rgba(125, 211, 252, 0.22);
-  }
-
-  .option-button {
-    background: #1b263b;
-    color: #f8fafc;
-    border: 1px solid rgba(148, 163, 184, 0.22);
-  }
-
-  .option-button:hover {
-    background: #24324a;
-  }
-
-  textarea,
-  select,
-  .file-input {
-    background: #0f172a;
-    color: #f8fafc;
-    border: 1px solid rgba(148, 163, 184, 0.28);
-  }
-
-  textarea::placeholder {
-    color: #94a3b8;
-  }
-
-  .checklist li {
-    background: #1b263b;
-    color: #f8fafc;
-    border: 1px solid rgba(148, 163, 184, 0.18);
-  }
-
-  .warning {
-    background: rgba(253, 230, 138, 0.12);
-    border-left-color: #fde68a;
-  }
-
-  .success {
-    background: rgba(134, 239, 172, 0.12);
-    border-left-color: #86efac;
-  }
-
-  .button-secondary {
-    background: #1e293b;
-    color: #7dd3fc;
-  }
-
-  .button-ghost {
-    background: transparent;
-    color: #7dd3fc;
-    border-color: rgba(148, 163, 184, 0.28);
-  }
-
-  .button-danger {
-    background: rgba(252, 165, 165, 0.14);
-    color: #fca5a5;
+  body .table-like .table-row > div {
+    color: #f8fafc !important;
   }
 }
