@@ -20,22 +20,24 @@ export class ProgressService {
 
   createInitialState() {
     return {
-      app: 'PflegeLernen',
-      schemaVersion: 1,
-      createdAt: todayISO(),
-      updatedAt: todayISO(),
-      topics: {},
-      reportAttempts: []
-    };
+  app: 'PflegeLernen',
+  schemaVersion: 1,
+  createdAt: todayISO(),
+  updatedAt: todayISO(),
+  topics: {},
+  reportAttempts: [],
+  reportDrafts: {}
+};
   }
 
   normalizeState(state) {
     const nextState = {
-      ...this.createInitialState(),
-      ...state,
-      topics: state?.topics ?? {},
-      reportAttempts: state?.reportAttempts ?? []
-    };
+  ...this.createInitialState(),
+  ...state,
+  topics: state?.topics ?? {},
+  reportAttempts: state?.reportAttempts ?? [],
+  reportDrafts: state?.reportDrafts ?? {}
+};
 
     this.repository.getTopics().forEach((topic) => {
       if (!nextState.topics[topic.id]) {
@@ -99,22 +101,40 @@ export class ProgressService {
     await this.save();
   }
 
-  async recordQuizResult(topicId, correctAnswers, totalQuestions) {
-    const topicState = this.getTopicState(topicId);
-    const scorePercent = totalQuestions === 0 ? 0 : Math.round((correctAnswers / totalQuestions) * 100);
+ async recordQuizResult(topicId, correctAnswers, totalQuestions) {
+  const topicState = this.getTopicState(topicId);
+  const scorePercent = totalQuestions === 0 ? 0 : Math.round((correctAnswers / totalQuestions) * 100);
 
-    topicState.quiz.bestScorePercent = Math.max(topicState.quiz.bestScorePercent ?? 0, scorePercent);
-    topicState.quiz.attempts.push({
-      correctAnswers,
-      totalQuestions,
-      scorePercent,
-      createdAt: todayISO()
-    });
-    topicState.updatedAt = todayISO();
+  topicState.quiz.bestScorePercent = Math.max(topicState.quiz.bestScorePercent ?? 0, scorePercent);
+  topicState.quiz.attempts.push({
+    correctAnswers,
+    totalQuestions,
+    scorePercent,
+    createdAt: todayISO()
+  });
 
-    await this.save();
-    return scorePercent;
-  }
+  topicState.quiz.currentAttempt = null;
+  topicState.updatedAt = todayISO();
+
+  await this.save();
+  return scorePercent;
+}
+
+async recordQuizAnswer(topicId, questionIndex, selectedIndex, correctAnswers, totalQuestions) {
+  const topicState = this.getTopicState(topicId);
+
+  topicState.quiz.currentAttempt = {
+    questionIndex,
+    selectedIndex,
+    correctAnswers,
+    totalQuestions,
+    updatedAt: todayISO()
+  };
+
+  topicState.updatedAt = todayISO();
+
+  await this.save();
+}
 
   async reviewCard(topicId, cardId, quality) {
     const topicState = this.getTopicState(topicId);
@@ -128,14 +148,30 @@ export class ProgressService {
   }
 
   async recordReportAttempt(taskId, scorePercent, textLength) {
-    this.state.reportAttempts.push({
-      taskId,
-      scorePercent,
-      textLength,
-      createdAt: todayISO()
-    });
-    await this.save();
-  }
+  this.state.reportAttempts.push({
+    taskId,
+    scorePercent,
+    textLength,
+    createdAt: todayISO()
+  });
+
+  await this.save();
+}
+
+async saveReportDraft(taskId, text) {
+  this.state.reportDrafts ??= {};
+
+  this.state.reportDrafts[taskId] = {
+    text,
+    updatedAt: todayISO()
+  };
+
+  await this.save();
+}
+
+getReportDraft(taskId) {
+  return this.state?.reportDrafts?.[taskId]?.text ?? '';
+}
 
   getTopicState(topicId) {
     if (!this.state) throw new Error('ProgressService wurde noch nicht geladen.');
