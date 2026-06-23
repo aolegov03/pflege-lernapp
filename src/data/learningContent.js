@@ -567,4 +567,491 @@ export const learningContent = {
       sample: '23.06.2026, 09:20 Uhr: Frau S. berichtet während der Zahnprothesenpflege über Schmerzen am Zahnfleisch. Im Oberkieferbereich gerötete Druckstelle sichtbar. Prothese gereinigt, Frau S. setzt Prothese vorerst nicht wieder ein. Fachkraft informiert. Weitere Beobachtung nach Standard. Kürzel.'
     }
   ]
+  
 };
+/* =========================================================
+   Schwierigkeit + pruefungsnahe Zusatzfragen
+   Diesen Block ganz unten in learningContent.js einfuegen.
+   Bestehende Fragen bleiben erhalten.
+   ========================================================= */
+
+const quizQuestionMeta = {
+  'ww-q1': { difficulty: 'leicht', type: 'Grundlagenfrage' },
+  'ww-q2': { difficulty: 'mittel', type: 'Sicherheitsfrage' },
+  'ww-q3': { difficulty: 'mittel', type: 'Durchfuehrung' },
+
+  'fi-q1': { difficulty: 'mittel', type: 'Fieberphase' },
+  'fi-q2': { difficulty: 'mittel', type: 'Massnahme' },
+  'fi-q3': { difficulty: 'leicht', type: 'Dokumentation' },
+
+  'vw-q1': { difficulty: 'leicht', type: 'Fachbegriff' },
+  'vw-q2': { difficulty: 'leicht', type: 'Fachbegriff' },
+  'vw-q3': { difficulty: 'mittel', type: 'Messung' },
+
+  'mp-q1': { difficulty: 'leicht', type: 'Grundpflege' },
+  'mp-q2': { difficulty: 'mittel', type: 'Beobachtung' },
+
+  'ip-q1': { difficulty: 'mittel', type: 'Hygiene' },
+  'ip-q2': { difficulty: 'mittel', type: 'Professionelles Handeln' },
+
+  'lo-q1': { difficulty: 'mittel', type: 'Hautpflege' },
+  'lo-q2': { difficulty: 'mittel', type: 'Beobachtung' },
+
+  'ra-q1': { difficulty: 'mittel', type: 'Sicherheit' },
+  'ra-q2': { difficulty: 'leicht', type: 'Biografie' },
+
+  'pb-q1': { difficulty: 'mittel', type: 'Dokumentation' },
+  'pb-q2': { difficulty: 'mittel', type: 'Dokumentation' }
+};
+
+const pruefungsFragen = {
+  wadenwickel: [
+    {
+      id: 'ww-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Fallfrage',
+      question: 'Eine Bewohnerin hat 39,2 °C Temperatur. Die Beine sind warm, es besteht kein Schuettelfrost. Sie ist ansprechbar, wirkt aber erschoepft. Welche Aussage ist fachlich am besten?',
+      options: [
+        'Wadenwickel sind bei Fieber ueber 39 °C grundsaetzlich verboten.',
+        'Wadenwickel koennen nach Standard geeignet sein, wenn keine Kontraindikationen bestehen und Zustand, Temperatur und Wohlbefinden weiter beobachtet werden.',
+        'Die Tuecher sollten eiskalt und sehr fest angelegt werden, damit die Temperatur schneller sinkt.',
+        'Nach dem Anlegen sind keine weiteren Kontrollen notwendig.'
+      ],
+      correctIndex: 1,
+      explanation: 'Pruefungslogik: erst Kontraindikationen pruefen, dann nach Standard durchfuehren, Wirkung und Befinden kontrollieren und die Massnahme dokumentieren.'
+    },
+    {
+      id: 'ww-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Pflegeentscheidung',
+      question: 'Ein Bewohner hat 38,9 °C Temperatur, kalte Fuesse und Schuettelfrost. Angehoerige bitten darum, sofort Wadenwickel anzulegen. Wie reagieren Sie fachlich korrekt?',
+      options: [
+        'Wadenwickel sofort anlegen, weil jede Temperatur ueber 38 °C gesenkt werden muss.',
+        'Wadenwickel nicht anwenden, da kalte Fuesse und Schuettelfrost dagegen sprechen. Zustand beobachten, Vitalwerte kontrollieren und nach Standard/Fachkraft handeln.',
+        'Nur einen Wadenwickel anlegen, damit der Koerper nicht zu stark auskuehlt.',
+        'Die Beine luftdicht einwickeln, damit kein Waermeverlust entsteht.'
+      ],
+      correctIndex: 1,
+      explanation: 'Kalte Fuesse und Schuettelfrost sprechen gegen Wadenwickel. In der Pruefung ist die Begruendung wichtig: keine zusaetzliche Kuehlung im Fieberanstieg, Beobachtung und Information nach Standard.'
+    },
+    {
+      id: 'ww-schwer-1',
+      difficulty: 'schwer',
+      type: 'Reihenfolge/Beobachtung',
+      question: 'Nach 8 Minuten sind die Wadenwickel koerperwarm. Die Bewohnerin sagt, dass sie sich wohler fuehlt. Was ist jetzt am sinnvollsten?',
+      options: [
+        'Tuecher kontrollieren, entfernen oder nach Standard wechseln, Befinden und Temperatur weiter beobachten und dokumentieren.',
+        'Tuecher mehrere Stunden liegen lassen, damit die Wirkung laenger anhaelt.',
+        'Die Tuecher trocken foehnen und weiter verwenden.',
+        'Die Beine fester einwickeln, damit die Tuecher nicht verrutschen.'
+      ],
+      correctIndex: 0,
+      explanation: 'Wenn die Tuecher warm geworden sind, wird die Massnahme kontrolliert beendet oder nach Standard wiederholt. Wichtig sind Beobachtung, Temperaturkontrolle und Dokumentation.'
+    },
+    {
+      id: 'ww-pruefung-3',
+      difficulty: 'pruefung',
+      type: 'Dokumentation',
+      question: 'Welche Dokumentation nach einem Wadenwickel ist am fachlichsten?',
+      options: [
+        'Bewohner hatte Fieber. Wadenwickel gemacht.',
+        '08:15 Uhr Temp. 39,2 °C, Haut warm, keine kalten Beine, kein Schuettelfrost. Wadenwickel nach Standard mit lauwarmen Tuechern angelegt, gut toleriert. 08:25 Uhr Tuecher koerperwarm, Bewohnerin fuehlt sich wohler. Weitere Temperaturkontrolle geplant. Kuerzel.',
+        'Fieber behandelt, alles okay.',
+        'Wadenwickel waren erfolgreich.'
+      ],
+      correctIndex: 1,
+      explanation: 'Eine gute Dokumentation ist sachlich, zeitnah und nachvollziehbar: Messwert, Beobachtung, Massnahme, Reaktion, Verlauf, weiteres Vorgehen und Kuerzel.'
+    }
+  ],
+
+  fieber: [
+    {
+      id: 'fi-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Fieberphase',
+      question: 'Eine Person liegt im Bett, friert stark, hat Gaensehaut und Schuettelfrost. Die Temperatur steigt. Welche pflegerische Massnahme passt am besten?',
+      options: [
+        'Person warm halten, Ruhe ermoeglichen, Vitalzeichen kontrollieren und keine kuehlenden Massnahmen wie Wadenwickel anwenden.',
+        'Sofort Wadenwickel anlegen, weil Schuettelfrost immer gekuehlt werden muss.',
+        'Fenster weit oeffnen und Decke entfernen, auch wenn die Person friert.',
+        'Die Temperatur nicht mehr messen, da Schuettelfrost eindeutig ist.'
+      ],
+      correctIndex: 0,
+      explanation: 'Schuettelfrost passt zum Fieberanstieg. In dieser Phase steht Waermeerhalt, Beobachtung, Vitalzeichenkontrolle und Handeln nach Standard im Vordergrund.'
+    },
+    {
+      id: 'fi-schwer-1',
+      difficulty: 'schwer',
+      type: 'Massnahmenwahl',
+      question: 'Eine Bewohnerin schwitzt stark, die Temperatur sinkt, Kleidung und Bettwaesche sind feucht. Was ist pflegerisch besonders wichtig?',
+      options: [
+        'Feuchte Kleidung belassen, damit die Temperatur weiter sinkt.',
+        'Trockene Kleidung/Bettwaesche anbieten, Fluessigkeit anbieten, Haut und Kreislauf beobachten.',
+        'Person dick zudecken, damit sie noch staerker schwitzt.',
+        'Keine Dokumentation, weil Schwitzen normal ist.'
+      ],
+      correctIndex: 1,
+      explanation: 'Beim Fieberabfall kann starkes Schwitzen auftreten. Wichtig sind trockene Kleidung, Fluessigkeit, Kreislaufbeobachtung und Dokumentation.'
+    },
+    {
+      id: 'fi-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Prioritaet',
+      question: 'Eine Person hat 39,5 °C Temperatur, heisse Haut, Durst und wirkt erschoepft. Was tun Sie zuerst fachlich sinnvoll?',
+      options: [
+        'Zustand einschaetzen, Vitalzeichen kontrollieren, Fluessigkeit anbieten falls erlaubt, leichte Kleidung/Decke waehlen und nach Standard/Fachkraft handeln.',
+        'Sofort mehrere Decken auflegen, damit die Person ausschwitzt.',
+        'Nur den Wert notieren und keine weitere Beobachtung durchfuehren.',
+        'Die Person allein lassen, weil Fieber immer harmlos ist.'
+      ],
+      correctIndex: 0,
+      explanation: 'Bei hohem Fieber zaehlt nicht nur der Zahlenwert. Wichtig sind Allgemeinzustand, Vitalzeichen, Fluessigkeit, Hitzestau vermeiden, Standard beachten und ggf. Fachkraft informieren.'
+    },
+    {
+      id: 'fi-mittel-1',
+      difficulty: 'mittel',
+      type: 'Dokumentation',
+      question: 'Welche Angabe macht eine Temperaturdokumentation am aussagekraeftigsten?',
+      options: [
+        'Bewohner ist warm.',
+        'Temperatur 38,7 °C, 14:10 Uhr, tympanal gemessen, Haut warm, trinkt wenig, Fachkraft informiert.',
+        'Fieber vorhanden.',
+        'Thermometer benutzt.'
+      ],
+      correctIndex: 1,
+      explanation: 'Messwert, Einheit, Uhrzeit, Messort/Methode, Beobachtung und Massnahme machen die Dokumentation nachvollziehbar.'
+    }
+  ],
+
+  vitalwerte: [
+    {
+      id: 'vw-schwer-1',
+      difficulty: 'schwer',
+      type: 'Fachbegriff/Beobachtung',
+      question: 'Bei einer Bewohnerin messen Sie Puls 118/min in Ruhe. Sie wirkt unruhig und hat Fieber. Welche Aussage ist fachlich am besten?',
+      options: [
+        'Der Puls ist langsam, das nennt man Bradykardie.',
+        'Der Puls ist erhoeht, das passt zu Tachykardie. Wert, Rhythmus, Qualitaet und Zustand beobachten und nach Standard/Fachkraft handeln.',
+        'Der Pulswert hat keine Bedeutung, wenn Fieber besteht.',
+        'Nur die Temperatur dokumentieren, der Puls muss nicht notiert werden.'
+      ],
+      correctIndex: 1,
+      explanation: 'Pruefungsrelevant ist nicht nur der Wert: Pulsfrequenz, Rhythmus, Qualitaet, Beschwerden und Zusammenhang mit Fieber werden beobachtet und dokumentiert.'
+    },
+    {
+      id: 'vw-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Pflegeentscheidung',
+      question: 'Ein Bewohner hat RR 90/60 mmHg, ihm ist schwindelig beim Aufstehen. Welche Reaktion ist fachlich am besten?',
+      options: [
+        'Weiter mobilisieren, damit der Kreislauf trainiert wird.',
+        'Hinsetzen oder hinlegen lassen, Sturzgefahr beachten, Vitalwerte kontrollieren, Beobachtung dokumentieren und Fachkraft informieren.',
+        'Nur Wasser anbieten und sonst nichts tun.',
+        'Den Blutdruckwert aufrunden, damit er normal aussieht.'
+      ],
+      correctIndex: 1,
+      explanation: 'Bei niedrigem Blutdruck mit Schwindel steht Sicherheit im Vordergrund: Sturzprophylaxe, erneute Kontrolle, Beobachtung, Dokumentation und Information nach Standard.'
+    },
+    {
+      id: 'vw-mittel-1',
+      difficulty: 'mittel',
+      type: 'Blutdruck',
+      question: 'Was bedeutet bei einem Blutdruck von 120/80 mmHg der Wert 120?',
+      options: [
+        'Diastolischer Wert in der Erschlaffungsphase.',
+        'Systolischer Wert beim Zusammenziehen des Herzens.',
+        'Pulsfrequenz pro Minute.',
+        'Koerpertemperatur.'
+      ],
+      correctIndex: 1,
+      explanation: 'Der obere Wert ist der systolische Wert. Der untere Wert ist der diastolische Wert.'
+    },
+    {
+      id: 'vw-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Dokumentation',
+      question: 'Welche Vitalwert-Dokumentation ist am fachlichsten?',
+      options: [
+        'Blutdruck okay, Puls schnell.',
+        '10:30 Uhr RR 160/95 mmHg li. Arm sitzend, Puls 104/min unregelmaessig, Temp. 38,3 °C tympanal. Bewohner klagt ueber Unruhe. Fachkraft informiert, weitere Kontrolle nach Standard.',
+        'Werte gemessen.',
+        'Bewohner war komisch.'
+      ],
+      correctIndex: 1,
+      explanation: 'Gute Dokumentation enthaelt Uhrzeit, Werte, Einheit, Messmethode/Messort, Beobachtung, Beschwerden, Massnahme und Information.'
+    },
+    {
+      id: 'vw-schwer-2',
+      difficulty: 'schwer',
+      type: 'Messfehler vermeiden',
+      question: 'Bei der Pulsmessung wirkt der Rhythmus unregelmaessig. Was ist fachlich sinnvoll?',
+      options: [
+        'Den Wert schaetzen und nicht weiter beachten.',
+        'Sorgfaeltig erneut messen, Rhythmus/Qualitaet beobachten, Beschwerden erfragen, dokumentieren und bei Auffaelligkeit Fachkraft informieren.',
+        'Nur 5 Sekunden messen und mit 2 multiplizieren.',
+        'Unregelmaessiger Puls ist immer normal.'
+      ],
+      correctIndex: 1,
+      explanation: 'Bei unregelmaessigem Puls sind genaue Messung, Beobachtung, Beschwerden, Dokumentation und Information wichtig.'
+    }
+  ],
+
+  mundpflege: [
+    {
+      id: 'mp-schwer-1',
+      difficulty: 'schwer',
+      type: 'Beobachtung',
+      question: 'Bei der Zahnprothesenpflege sehen Sie eine geroetete Druckstelle am Zahnfleisch. Was ist fachlich richtig?',
+      options: [
+        'Prothese sofort wieder einsetzen und nichts sagen.',
+        'Druckstelle beobachten, Person nach Schmerzen fragen, Prothese nach Standard handhaben, dokumentieren und Fachkraft informieren.',
+        'Die Druckstelle kraeftig massieren, damit sie schneller verschwindet.',
+        'Nur die Prothese reinigen, der Mundraum ist nicht wichtig.'
+      ],
+      correctIndex: 1,
+      explanation: 'Druckstellen koennen Schmerzen und Entzuendungen verursachen. Wichtig sind Beobachtung, Ressourcen/Wunsch, Dokumentation und Information.'
+    },
+    {
+      id: 'mp-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Pflegeentscheidung',
+      question: 'Eine Bewohnerin lehnt die Mundpflege morgens ab. Wie handeln Sie professionell?',
+      options: [
+        'Mundpflege gegen den Willen durchfuehren, weil sie wichtig ist.',
+        'Ablehnung respektieren, Grund erfragen, spaeter erneut anbieten, ggf. anleiten/unterstuetzen und Ablehnung sachlich dokumentieren.',
+        'Mundpflege dauerhaft weglassen und nie wieder anbieten.',
+        'Die Ablehnung als unkooperativ bewerten und so dokumentieren.'
+      ],
+      correctIndex: 1,
+      explanation: 'Pruefungsrelevant sind Selbstbestimmung, Kommunikation, Ressourcenfoerderung, erneutes Angebot und sachliche Dokumentation.'
+    },
+    {
+      id: 'mp-mittel-1',
+      difficulty: 'mittel',
+      type: 'Prothesenpflege',
+      question: 'Warum wird das Waschbecken bei der Prothesenpflege gesichert, zum Beispiel mit Wasser oder einem Tuch?',
+      options: [
+        'Damit die Prothese beim Herunterfallen nicht so leicht zerbricht.',
+        'Damit die Prothese schneller trocknet.',
+        'Damit keine Mundbeobachtung notwendig ist.',
+        'Damit keine Haendehygiene noetig ist.'
+      ],
+      correctIndex: 0,
+      explanation: 'Prothesen koennen beim Herunterfallen brechen. Deshalb wird das Waschbecken gesichert und vorsichtig gearbeitet.'
+    }
+  ],
+
+  intimpflege: [
+    {
+      id: 'ip-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Hygiene/Fallfrage',
+      question: 'Sie unterstuetzen eine Bewohnerin bei der Intimpflege. Welche Vorgehensweise ist fachlich korrekt?',
+      options: [
+        'Von hinten nach vorne reinigen, damit es schneller geht.',
+        'Intimsphaere schuetzen, Zustimmung einholen, von vorne nach hinten reinigen, Handschuhe/Haendehygiene beachten und Haut beobachten.',
+        'So viele Personen wie moeglich im Zimmer lassen.',
+        'Auffaellige Hautstellen nicht dokumentieren.'
+      ],
+      correctIndex: 1,
+      explanation: 'Wichtig sind Wuerde, Intimsphaere, Zustimmung, hygienische Arbeitsweise, richtige Reinigungsrichtung und Beobachtung.'
+    },
+    {
+      id: 'ip-schwer-1',
+      difficulty: 'schwer',
+      type: 'Maennliche Intimpflege',
+      question: 'Bei einem Bewohner wurde die Vorhaut zur Reinigung vorsichtig zurueckgezogen. Was ist danach wichtig?',
+      options: [
+        'Die Vorhaut zurueckgezogen lassen.',
+        'Die Vorhaut nach der Reinigung wieder vorschieben und auf Schmerzen, Roetung oder Schwellung achten.',
+        'Die Eichel trocken und ohne Beobachtung lassen.',
+        'Keine Dokumentation bei Auffaelligkeiten.'
+      ],
+      correctIndex: 1,
+      explanation: 'Nach dem Reinigen muss die Vorhaut wieder vorgeschoben werden. Beobachtungen wie Schmerzen, Roetung oder Schwellung werden gemeldet/dokumentiert.'
+    },
+    {
+      id: 'ip-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Beobachtung',
+      question: 'Bei der Intimpflege bemerken Sie starke Roetung, unangenehmen Geruch und die Person aeussert Schmerzen. Was tun Sie?',
+      options: [
+        'Ignorieren, weil Intimpflege immer unangenehm ist.',
+        'Beobachtung ernst nehmen, schonend reinigen, keine reizenden Produkte verwenden, dokumentieren und Fachkraft informieren.',
+        'Mehrfach stark reiben, damit der Geruch verschwindet.',
+        'Die Person nicht mehr waschen.'
+      ],
+      correctIndex: 1,
+      explanation: 'Auffaelligkeiten im Intimbereich muessen beobachtet, fachlich weitergegeben und sachlich dokumentiert werden.'
+    }
+  ],
+
+  lotionen: [
+    {
+      id: 'lo-schwer-1',
+      difficulty: 'schwer',
+      type: 'Hautpflegeentscheidung',
+      question: 'Eine Person hat trockene, sproede Haut an den Unterschenkeln. Welche Pflege passt eher?',
+      options: [
+        'Eine rueckfettende W/O-Pflege nach Standard, duenn auftragen und Hautreaktion beobachten.',
+        'Gar keine Pflege, weil trockene Haut immer normal ist.',
+        'Sehr viel Creme in Hautfalten auftragen.',
+        'Eine alkoholhaltige Loesung grossflaechig auftragen.'
+      ],
+      correctIndex: 0,
+      explanation: 'Bei trockener, sproeder Haut ist haeufig eine rueckfettende Pflege sinnvoll. Auswahl immer nach Hautzustand, Standard und Vertraeglichkeit begruenden.'
+    },
+    {
+      id: 'lo-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Inkontinenz/Hautschutz',
+      question: 'Bei einer inkontinenten Person ist die Haut im Gesaessbereich feuchtigkeitsbelastet, aber intakt. Was ist fachlich am sinnvollsten?',
+      options: [
+        'Haut schonend reinigen, gut trocknen, geeigneten Hautschutz/Barrierecreme duenn nach Standard anwenden und Haut weiter beobachten.',
+        'Die Haut nass lassen, damit sie nicht austrocknet.',
+        'Sehr dick Creme auftragen, ohne die Haut vorher zu reinigen.',
+        'Nur parfuemierte Koerperlotion verwenden, egal wie die Haut aussieht.'
+      ],
+      correctIndex: 0,
+      explanation: 'Bei Feuchtigkeitsbelastung geht es um Hautschutz, Reinigung, Trocknung, duennes Auftragen nach Standard und Beobachtung.'
+    },
+    {
+      id: 'lo-mittel-1',
+      difficulty: 'mittel',
+      type: 'Hautfalten',
+      question: 'Warum sollten Hautfalten nicht dick eingecremt und feucht belassen werden?',
+      options: [
+        'Weil ein feuchtes Milieu Hautreizungen beguenstigen kann.',
+        'Weil Hautfalten nie gepflegt werden duerfen.',
+        'Weil Creme immer verboten ist.',
+        'Weil Beobachtung dann nicht mehr noetig ist.'
+      ],
+      correctIndex: 0,
+      explanation: 'In Hautfalten ist ein trockenes, reizarmes Milieu wichtig. Zu viel Creme und Feuchtigkeit koennen Hautprobleme beguenstigen.'
+    }
+  ],
+
+  rasur: [
+    {
+      id: 'ra-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Sicherheitsentscheidung',
+      question: 'Ein Bewohner nimmt Blutverduenner, hat empfindliche Haut und wuenscht eine Rasur. Welche Entscheidung ist fachlich am sichersten?',
+      options: [
+        'Nassrasur mit scharfer Klinge ohne Ruecksprache, weil sie gruendlicher ist.',
+        'Eher Trockenrasur erwaegen, Hautzustand und Wunsch beachten, Blutungsrisiko beruecksichtigen und nach Standard/Fachkraft handeln.',
+        'Gar nicht rasieren und den Wunsch ignorieren.',
+        'Sehr stark gegen die Wuchsrichtung rasieren.'
+      ],
+      correctIndex: 1,
+      explanation: 'Bei erhoehtem Blutungsrisiko ist Sicherheit wichtig. Trockenrasur kann schonender sein; Wunsch, Hautzustand und Standard werden einbezogen.'
+    },
+    {
+      id: 'ra-schwer-1',
+      difficulty: 'schwer',
+      type: 'Biografie',
+      question: 'Ein Bewohner moechte wie frueher nass rasiert werden. Haut ist intakt, kein bekanntes Blutungsrisiko. Was ist fachlich passend?',
+      options: [
+        'Wunsch und Biografie beruecksichtigen, Nassrasur sicher vorbereiten, Haut beobachten und nach Standard durchfuehren.',
+        'Biografie spielt in der Pflege keine Rolle.',
+        'Immer Trockenrasur, auch wenn die Person Nassrasur gewohnt ist.',
+        'Ohne Einwilligung rasieren, damit es schneller geht.'
+      ],
+      correctIndex: 0,
+      explanation: 'Ressourcen, Gewohnheiten und Wuensche gehoeren zur personenzentrierten Pflege. Sicherheit und Hautbeobachtung bleiben wichtig.'
+    },
+    {
+      id: 'ra-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Komplikation',
+      question: 'Bei der Rasur entsteht eine kleine Schnittverletzung. Was tun Sie fachlich korrekt?',
+      options: [
+        'Ignorieren und weiter rasieren.',
+        'Rasur unterbrechen, Blutung versorgen nach Standard, Haut weiter beobachten, Bewohner informieren/beruhigen und Vorfall dokumentieren bzw. Fachkraft informieren.',
+        'Die Stelle stark reiben, damit sie schneller heilt.',
+        'Die Verletzung verschweigen.'
+      ],
+      correctIndex: 1,
+      explanation: 'Bei Verletzungen sind sichere Versorgung, Beobachtung, Information und Dokumentation wichtig.'
+    }
+  ],
+
+  pflegebericht: [
+    {
+      id: 'pb-pruefung-1',
+      difficulty: 'pruefung',
+      type: 'Dokumentation',
+      question: 'Welche Formulierung ist fuer einen Pflegebericht am professionellsten?',
+      options: [
+        'Bewohner war heute schwierig und nervig.',
+        '09:20 Uhr Bewohner lehnt Mundpflege ab, sagt: „Ich moechte spaeter.“ Spaeteres Angebot um 10:30 Uhr geplant. Fachkraft informiert. Kuerzel.',
+        'Bewohner hatte keine Lust.',
+        'Mundpflege nicht gemacht, egal.'
+      ],
+      correctIndex: 1,
+      explanation: 'Professionelle Dokumentation ist sachlich, beobachtbar, wertfrei, zeitnah und enthaelt Massnahme/weiteres Vorgehen.'
+    },
+    {
+      id: 'pb-schwer-1',
+      difficulty: 'schwer',
+      type: 'Messwerte',
+      question: 'Was ist bei der Dokumentation eines auffaelligen Vitalwerts am wichtigsten?',
+      options: [
+        'Nur schreiben: Wert war schlecht.',
+        'Wert mit Einheit, Uhrzeit, Messort/Methode, Beobachtung, Beschwerden, Massnahme und Information dokumentieren.',
+        'Nur den Namen des Messgeraets notieren.',
+        'Den Wert weglassen, wenn er auffaellig ist.'
+      ],
+      correctIndex: 1,
+      explanation: 'Auffaellige Werte muessen nachvollziehbar dokumentiert werden. Dazu gehoeren Messdaten, Beobachtung, Massnahmen und Weitergabe.'
+    },
+    {
+      id: 'pb-pruefung-2',
+      difficulty: 'pruefung',
+      type: 'Pflegebericht Wadenwickel',
+      question: 'Welche Angabe darf bei der Dokumentation eines Wadenwickels am ehesten nicht fehlen?',
+      options: [
+        'Nur die Aussage, dass alles gut war.',
+        'Temperaturwert, Uhrzeit, Beobachtung vor der Massnahme, Durchfuehrung, Reaktion, Kontrolle und weiteres Vorgehen.',
+        'Die Meinung der Pflegekraft ueber die Person.',
+        'Eine ungenaue Angabe wie morgens.'
+      ],
+      correctIndex: 1,
+      explanation: 'Bei Massnahmen wie Wadenwickel muss nachvollziehbar sein, warum, wie und mit welcher Wirkung sie durchgefuehrt wurden.'
+    },
+    {
+      id: 'pb-mittel-1',
+      difficulty: 'mittel',
+      type: 'Wertfrei formulieren',
+      question: 'Welche Formulierung ist wertfrei und beobachtbar?',
+      options: [
+        'Bewohner stellt sich an.',
+        'Bewohner aeussert beim Aufstehen Schwindel und setzt sich wieder auf die Bettkante.',
+        'Bewohner ist faul.',
+        'Bewohner nervt beim Waschen.'
+      ],
+      correctIndex: 1,
+      explanation: 'Wertfrei bedeutet: Beobachtbares Verhalten, Aussagen und Messwerte dokumentieren, keine abwertenden Bewertungen.'
+    }
+  ]
+};
+
+for (const topic of learningContent.topics) {
+  if (!Array.isArray(topic.quiz)) continue;
+
+  topic.quiz = topic.quiz.map((question) => ({
+    ...question,
+    difficulty: question.difficulty ?? quizQuestionMeta[question.id]?.difficulty ?? 'leicht',
+    type: question.type ?? quizQuestionMeta[question.id]?.type ?? 'Grundlagenfrage'
+  }));
+
+  const existingIds = new Set(topic.quiz.map((question) => question.id));
+  const extraQuestions = pruefungsFragen[topic.id] ?? [];
+
+  for (const question of extraQuestions) {
+    if (!existingIds.has(question.id)) {
+      topic.quiz.push(question);
+      existingIds.add(question.id);
+    }
+  }
+}
