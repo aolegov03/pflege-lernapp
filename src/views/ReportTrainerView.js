@@ -5,10 +5,10 @@ export class ReportTrainerView extends BaseView {
   async render(root) {
     const { repository } = this.context;
     this.tasks = repository.getReportTasks();
-    this.selectedTask = this.tasks[0];
-    this.currentText = '';
-    this.root = root;
-
+this.selectedTask = this.tasks[0];
+this.currentText = this.context.progress.getReportDraft(this.selectedTask.id);
+this.root = root;
+this.draftTimer = null;
     const stack = this.stack();
     stack.append(this.card([
       createElement('p', { className: 'eyebrow', text: 'Pflegebericht' }),
@@ -19,10 +19,10 @@ export class ReportTrainerView extends BaseView {
     const select = createElement('select', {
       ariaLabel: 'Fallbeispiel auswählen',
       onChange: (event) => {
-        this.selectedTask = this.tasks.find((task) => task.id === event.target.value) ?? this.tasks[0];
-        this.currentText = '';
-        this.renderTrainer();
-      }
+  this.selectedTask = this.tasks.find((task) => task.id === event.target.value) ?? this.tasks[0];
+  this.currentText = this.context.progress.getReportDraft(this.selectedTask.id);
+  this.renderTrainer();
+}
     }, this.tasks.map((task) => createElement('option', { value: task.id, text: task.title })));
 
     stack.append(this.card([
@@ -41,9 +41,10 @@ export class ReportTrainerView extends BaseView {
     const wrapper = this.stack();
     this.textarea = createElement('textarea', {
       placeholder: 'Schreibe hier deinen Pflegebericht ...',
-      onInput: (event) => {
-        this.currentText = event.target.value;
-      }
+     onInput: (event) => {
+  this.currentText = event.target.value;
+  this.queueDraftSave();
+}
     });
     this.textarea.value = this.currentText;
 
@@ -64,12 +65,28 @@ export class ReportTrainerView extends BaseView {
     this.trainerArea.replaceChildren(wrapper);
   }
 
+  queueDraftSave() {
+  if (this.draftTimer) {
+    clearTimeout(this.draftTimer);
+  }
+
+  this.draftTimer = window.setTimeout(() => {
+    this.context.progress
+      .saveReportDraft(this.selectedTask.id, this.currentText)
+      .catch((error) => console.warn('Bericht-Entwurf konnte nicht gespeichert werden.', error));
+  }, 500);
+}
+  
   async checkReport() {
-    const text = this.textarea.value.trim();
-    this.currentText = this.textarea.value;
-    const result = this.evaluateText(text, this.selectedTask);
-    await this.context.progress.recordReportAttempt(this.selectedTask.id, result.scorePercent, text.length);
-    this.renderTrainer(result);
+   const text = this.textarea.value.trim();
+this.currentText = this.textarea.value;
+
+await this.context.progress.saveReportDraft(this.selectedTask.id, this.currentText);
+
+const result = this.evaluateText(text, this.selectedTask);
+await this.context.progress.recordReportAttempt(this.selectedTask.id, result.scorePercent, text.length);
+
+this.renderTrainer(result);
   }
 
   showSample() {
