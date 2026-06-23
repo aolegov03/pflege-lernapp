@@ -508,239 +508,105 @@ textarea {
     box-shadow: var(--shadow);
   }
 }
-/* Schoener iOS-aehnlicher Darkmode */
+/* Darkmode-Korrektur: helle Karten und unsichtbare Schrift beheben */
 @media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-
-    --bg: #0b1120;
-    --bg-soft: #111827;
-    --surface: #151f32;
-    --surface-2: #1b263b;
-    --surface-3: #24324a;
-
-    --text: #f8fafc;
-    --text-soft: #e2e8f0;
-    --muted: #a8b3c7;
-
-    --border: rgba(148, 163, 184, 0.22);
-
-    --primary: #7dd3fc;
-    --primary-strong: #38bdf8;
-    --primary-soft: rgba(125, 211, 252, 0.14);
-
-    --success: #86efac;
-    --warning: #fde68a;
-    --danger: #fca5a5;
-
-    --shadow: 0 18px 45px rgba(0, 0, 0, 0.35);
+  .app-header {
+    background: rgba(15, 23, 42, 0.94);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
   }
 
-  html,
-  body {
-    background:
-      radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 32rem),
-      radial-gradient(circle at top right, rgba(129, 140, 248, 0.12), transparent 30rem),
-      var(--bg);
-    color: var(--text);
+  .app-header h1 {
+    color: #f8fafc;
   }
 
-  body {
-    color: var(--text);
+  .app-header .eyebrow {
+    color: #7dd3fc;
   }
 
-  .app-shell,
-  main,
-  .page,
-  .view {
-    background: transparent;
-    color: var(--text);
+  .sync-pill {
+    background: #1e293b;
+    color: #60a5fa;
   }
 
-  header,
-  .app-header,
-  .hero,
-  .topbar {
-    background: linear-gradient(135deg, #162033, #101827);
-    color: var(--text);
-    border-color: var(--border);
-    box-shadow: var(--shadow);
+  .table-row {
+    background: linear-gradient(180deg, #1b263b, #151f32);
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.22);
   }
 
-  .card,
-  .topic-card,
-  .progress-card,
-  .quiz-card,
-  .flashcard,
-  .report-card,
-  .panel,
-  .section-card,
-  .today-card,
-  .stat-card {
-    background: linear-gradient(180deg, var(--surface), var(--surface-2));
-    color: var(--text);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow);
+  .table-row strong {
+    color: #f8fafc;
   }
 
-  .card:hover,
-  .topic-card:hover,
-  .flashcard:hover {
-    background: linear-gradient(180deg, #1a2740, #1b263b);
-    border-color: rgba(125, 211, 252, 0.32);
+  .table-row .notice {
+    color: #cbd5e1;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  strong,
-  .title {
-    color: var(--text);
+  .notice {
+    color: #cbd5e1;
   }
 
-  p,
-  li,
-  label,
-  .body-text {
-    color: var(--text-soft);
+  .progress-label {
+    color: #cbd5e1;
   }
 
-  .muted,
-  .subtitle,
-  .hint,
-  .small-text,
-  .meta,
-  .description {
-    color: var(--muted);
-  }
-
-  a {
-    color: var(--primary);
-  }
-
-  a:hover {
-    color: var(--primary-strong);
-  }
-
-  button,
-  .button,
-  .btn,
-  .tab-button,
-  .nav-button {
-    background: var(--surface-3);
-    color: var(--text);
-    border: 1px solid var(--border);
-    box-shadow: none;
-  }
-
-  button:hover,
-  .button:hover,
-  .btn:hover,
-  .tab-button:hover,
-  .nav-button:hover {
-    background: #2b3a55;
-    border-color: rgba(125, 211, 252, 0.35);
-  }
-
-  button.primary,
-  .button.primary,
-  .btn.primary,
-  .active,
-  .tab-button.active,
-  .nav-button.active {
-    background: linear-gradient(135deg, #38bdf8, #818cf8);
-    color: #07111f;
-    border-color: transparent;
-    font-weight: 700;
-  }
-
-  input,
-  textarea,
-  select {
-    background: #0f172a;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-
-  input:focus,
-  textarea:focus,
-  select:focus {
-    outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.16);
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: #78869c;
-  }
-
-  .bottom-nav,
-  nav,
-  .navigation {
-    background: rgba(15, 23, 42, 0.88);
-    border-top: 1px solid var(--border);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-  }
-
-  .bottom-nav a,
-  .bottom-nav button,
-  nav a,
-  nav button {
-    color: var(--muted);
-  }
-
-  .bottom-nav a.active,
-  .bottom-nav button.active,
-  nav a.active,
-  nav button.active {
-    color: #07111f;
-    background: linear-gradient(135deg, #7dd3fc, #a5b4fc);
-  }
-
-  .badge,
-  .tag,
-  .pill {
-    background: var(--primary-soft);
-    color: var(--primary);
+  .tag {
+    background: rgba(125, 211, 252, 0.14);
+    color: #7dd3fc;
     border: 1px solid rgba(125, 211, 252, 0.22);
   }
 
-  .progress-bar,
-  .progress-track {
+  .option-button {
+    background: #1b263b;
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+  }
+
+  .option-button:hover {
+    background: #24324a;
+  }
+
+  textarea,
+  select,
+  .file-input {
     background: #0f172a;
-    border: 1px solid var(--border);
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.28);
   }
 
-  .progress-fill,
-  .progress-value {
-    background: linear-gradient(90deg, #38bdf8, #818cf8);
+  textarea::placeholder {
+    color: #94a3b8;
   }
 
-  .correct,
-  .success {
-    background: rgba(134, 239, 172, 0.13);
-    color: var(--success);
-    border-color: rgba(134, 239, 172, 0.25);
-  }
-
-  .wrong,
-  .danger,
-  .error {
-    background: rgba(252, 165, 165, 0.13);
-    color: var(--danger);
-    border-color: rgba(252, 165, 165, 0.25);
+  .checklist li {
+    background: #1b263b;
+    color: #f8fafc;
+    border: 1px solid rgba(148, 163, 184, 0.18);
   }
 
   .warning {
-    background: rgba(253, 230, 138, 0.13);
-    color: var(--warning);
-    border-color: rgba(253, 230, 138, 0.25);
+    background: rgba(253, 230, 138, 0.12);
+    border-left-color: #fde68a;
   }
 
-  hr {
-    border-color: var(--border);
+  .success {
+    background: rgba(134, 239, 172, 0.12);
+    border-left-color: #86efac;
+  }
+
+  .button-secondary {
+    background: #1e293b;
+    color: #7dd3fc;
+  }
+
+  .button-ghost {
+    background: transparent;
+    color: #7dd3fc;
+    border-color: rgba(148, 163, 184, 0.28);
+  }
+
+  .button-danger {
+    background: rgba(252, 165, 165, 0.14);
+    color: #fca5a5;
   }
 }
