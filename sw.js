@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pflege-lernapp-v3-nice-darkmode';
+const CACHE_NAME = 'pflege-lernapp-v4-darkmode-fix';
 const CORE_ASSETS = [
   './',
   './index.html',
