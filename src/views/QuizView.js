@@ -61,13 +61,23 @@ export class QuizView extends BaseView {
     this.quizArea.replaceChildren(wrapper);
   }
 
-  answer(index) {
-    this.selectedIndex = index;
-    if (index === this.topic.quiz[this.index].correctIndex) {
-      this.correct += 1;
-    }
-    this.renderQuestion();
+  async answer(index) {
+  this.selectedIndex = index;
+
+  if (index === this.topic.quiz[this.index].correctIndex) {
+    this.correct += 1;
   }
+
+  await this.context.progress.recordQuizAnswer(
+    this.topic.id,
+    this.index,
+    index,
+    this.correct,
+    this.topic.quiz.length
+  );
+
+  this.renderQuestion();
+}
 
   async next() {
     if (this.index < this.topic.quiz.length - 1) {
