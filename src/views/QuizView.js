@@ -3,7 +3,7 @@ import { createElement } from '../utils/dom.js';
 
 export class QuizView extends BaseView {
   async render(root, params) {
-    const { repository } = this.context;
+    const { repository, progress } = this.context;
     this.topic = repository.getTopicById(params.id);
 
     if (!this.topic) {
@@ -11,16 +11,20 @@ export class QuizView extends BaseView {
       return;
     }
 
-    this.index = 0;
-    this.correct = 0;
-    this.selectedIndex = null;
+    const savedAttempt = progress.getCurrentQuizAttempt(this.topic.id);
+    const canResume = savedAttempt && savedAttempt.questionIndex >= 0 && savedAttempt.questionIndex < this.topic.quiz.length;
+
+    this.index = canResume ? savedAttempt.questionIndex : 0;
+    this.answers = canResume ? [...(savedAttempt.answers ?? [])] : [];
+    this.correct = canResume ? savedAttempt.correctAnswers : 0;
+    this.selectedIndex = this.answers[this.index]?.selectedIndex ?? (canResume ? savedAttempt.selectedIndex : null);
     this.finished = false;
 
     const stack = this.stack();
     stack.append(this.card([
       createElement('p', { className: 'eyebrow', text: 'Quiz' }),
       createElement('h2', { text: this.topic.title }),
-      createElement('p', { className: 'lead', text: 'Wähle die beste Antwort. Am Ende wird dein bestes Ergebnis gespeichert.' })
+      createElement('p', { className: 'lead', text: 'Wähle die beste Antwort. Deine Antworten werden automatisch auf diesem Gerät gespeichert.' })
     ]));
 
     this.quizArea = createElement('div');
@@ -31,10 +35,18 @@ export class QuizView extends BaseView {
 
   renderQuestion() {
     const question = this.topic.quiz[this.index];
+    const difficulty = question.difficulty ?? 'leicht';
+    const typeText = question.type ? ` · ${question.type}` : '';
     const wrapper = this.stack();
+
+    this.selectedIndex = this.answers[this.index]?.selectedIndex ?? this.selectedIndex;
 
     wrapper.append(this.card([
       createElement('p', { className: 'eyebrow', text: `Frage ${this.index + 1}/${this.topic.quiz.length}` }),
+      createElement('div', {
+        className: `difficulty-badge difficulty-${difficulty}`,
+        text: `${this.getDifficultyLabel(difficulty)}${typeText}`
+      }),
       createElement('h2', { text: question.question }),
       createElement('div', { className: 'option-list' }, question.options.map((option, index) => {
         let className = 'option-button';
@@ -62,36 +74,99 @@ export class QuizView extends BaseView {
   }
 
   async answer(index) {
-  this.selectedIndex = index;
+    if (this.selectedIndex !== null) return;
 
-  if (index === this.topic.quiz[this.index].correctIndex) {
-    this.correct += 1;
+    const question = this.topic.quiz[this.index];
+    const isCorrect = index === question.correctIndex;
+
+    this.selectedIndex = index;
+
+    if (isCorrect) {
+      this.correct += 1;
+    }
+
+    this.answers[this.index] = {
+      questionId: question.id,
+      selectedIndex: index,
+      correct: isCorrect,
+      difficulty: question.difficulty ?? 'leicht'
+    };
+
+    await this.context.progress.recordQuizAnswer(
+      this.topic.id,
+      this.index,
+      index,
+      this.correct,
+      this.topic.quiz.length,
+      this.answers
+    );
+
+    this.renderQuestion();
   }
-
-  await this.context.progress.recordQuizAnswer(
-    this.topic.id,
-    this.index,
-    index,
-    this.correct,
-    this.topic.quiz.length
-  );
-
-  this.renderQuestion();
-}
 
   async next() {
     if (this.index < this.topic.quiz.length - 1) {
       this.index += 1;
-      this.selectedIndex = null;
+      this.selectedIndex = this.answers[this.index]?.selectedIndex ?? null;
+
+      await this.context.progress.recordQuizAnswer(
+        this.topic.id,
+        this.index,
+        this.selectedIndex,
+        this.correct,
+        this.topic.quiz.length,
+        this.answers
+      );
+
       this.renderQuestion();
       return;
     }
 
-    const scorePercent = await this.context.progress.recordQuizResult(this.topic.id, this.correct, this.topic.quiz.length);
+    const difficultyStats = this.buildDifficultyStats();
+    const scorePercent = await this.context.progress.recordQuizResult(
+      this.topic.id,
+      this.correct,
+      this.topic.quiz.length,
+      difficultyStats
+    );
+
     this.quizArea.replaceChildren(this.emptyState(
       `Quiz beendet: ${scorePercent}%`,
-      `Du hast ${this.correct} von ${this.topic.quiz.length} Fragen richtig beantwortet. Dein Ergebnis wurde gespeichert.`,
+      `Du hast ${this.correct} von ${this.topic.quiz.length} Fragen richtig beantwortet. Dein Ergebnis wurde automatisch gespeichert.`,
       this.linkButton('Zurück zum Thema', `/topic/${this.topic.id}`)
     ));
+  }
+
+  buildDifficultyStats() {
+    const stats = {};
+
+    for (const answer of this.answers) {
+      if (!answer) continue;
+
+      const difficulty = answer.difficulty ?? 'leicht';
+      stats[difficulty] ??= { correct: 0, total: 0, percent: 0 };
+      stats[difficulty].total += 1;
+
+      if (answer.correct) {
+        stats[difficulty].correct += 1;
+      }
+    }
+
+    for (const value of Object.values(stats)) {
+      value.percent = value.total === 0 ? 0 : Math.round((value.correct / value.total) * 100);
+    }
+
+    return stats;
+  }
+
+  getDifficultyLabel(difficulty) {
+    const labels = {
+      leicht: 'Leicht',
+      mittel: 'Mittel',
+      schwer: 'Schwer',
+      pruefung: 'Prüfungsfrage'
+    };
+
+    return labels[difficulty] ?? 'Leicht';
   }
 }
