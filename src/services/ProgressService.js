@@ -101,7 +101,7 @@ export class ProgressService {
     await this.save();
   }
 
- async recordQuizResult(topicId, correctAnswers, totalQuestions) {
+async recordQuizResult(topicId, correctAnswers, totalQuestions, difficultyStats = {}) {
   const topicState = this.getTopicState(topicId);
   const scorePercent = totalQuestions === 0 ? 0 : Math.round((correctAnswers / totalQuestions) * 100);
 
@@ -110,9 +110,9 @@ export class ProgressService {
     correctAnswers,
     totalQuestions,
     scorePercent,
+    difficultyStats,
     createdAt: todayISO()
   });
-
   topicState.quiz.currentAttempt = null;
   topicState.updatedAt = todayISO();
 
@@ -120,7 +120,7 @@ export class ProgressService {
   return scorePercent;
 }
 
-async recordQuizAnswer(topicId, questionIndex, selectedIndex, correctAnswers, totalQuestions) {
+async recordQuizAnswer(topicId, questionIndex, selectedIndex, correctAnswers, totalQuestions, answers = []) {
   const topicState = this.getTopicState(topicId);
 
   topicState.quiz.currentAttempt = {
@@ -128,14 +128,13 @@ async recordQuizAnswer(topicId, questionIndex, selectedIndex, correctAnswers, to
     selectedIndex,
     correctAnswers,
     totalQuestions,
+    answers,
     updatedAt: todayISO()
   };
-
   topicState.updatedAt = todayISO();
 
   await this.save();
 }
-
   async reviewCard(topicId, cardId, quality) {
     const topicState = this.getTopicState(topicId);
     const previous = topicState.flashcards[cardId] ?? this.createCardState();
@@ -244,9 +243,47 @@ getReportDraft(taskId) {
     await this.save();
   }
 
-  async reset() {
+   async reset() {
     this.state = this.createInitialState();
     this.state = this.normalizeState(this.state);
     await this.save();
+  }
+
+  getCurrentQuizAttempt(topicId) {
+    const topicState = this.getTopicState(topicId);
+    return topicState.quiz?.currentAttempt ?? null;
+  }
+
+  getDifficultyStats(topicId = null) {
+    const labels = ['leicht', 'mittel', 'schwer', 'pruefung'];
+    const stats = Object.fromEntries(
+      labels.map((label) => [label, { correct: 0, total: 0, percent: 0 }])
+    );
+
+    const topics = topicId
+      ? [this.repository.getTopicById(topicId)].filter(Boolean)
+      : this.repository.getTopics();
+
+    for (const topic of topics) {
+      const attempts = this.getTopicState(topic.id).quiz?.attempts ?? [];
+
+      for (const attempt of attempts) {
+        const attemptStats = attempt.difficultyStats ?? {};
+
+        for (const [difficulty, value] of Object.entries(attemptStats)) {
+          stats[difficulty] ??= { correct: 0, total: 0, percent: 0 };
+          stats[difficulty].correct += value.correct ?? 0;
+          stats[difficulty].total += value.total ?? 0;
+        }
+      }
+    }
+
+    for (const value of Object.values(stats)) {
+      value.percent = value.total === 0
+        ? 0
+        : Math.round((value.correct / value.total) * 100);
+    }
+
+    return stats;
   }
 }
