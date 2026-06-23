@@ -1,0 +1,11 @@
+{
+  "name": "pflege-lernapp-pwa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kostenlose PWA-Lernapp fuer Pflege-Themen mit lokal gespeichertem Fortschritt.",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "check": "node --check src/app.js && find src -name '*.js' -print0 | xargs -0 -n1 node --check"
+  }
+}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="PflegeLernen: kostenlose Lern-App fuer iPhone und iPad mit Karteikarten, Quiz, Pflegebericht-Training und lokal gespeichertem Fortschritt.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PflegeLernen">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./assets/icon-192.png">
+  <link rel="icon" href="./assets/icon-192.png">
+  <link rel="stylesheet" href="./src/styles/main.css">
+  <title>PflegeLernen</title>
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">Lern-App</p>
+      <h1>PflegeLernen</h1>
+    </div>
+    <span class="sync-pill" id="storageStatus">lokal gespeichert</span>
+  </header>
+
+  <main id="app" class="app-shell" aria-live="polite">
+    <section class="card">
+      <h2>App wird geladen ...</h2>
+      <p>Falls diese Meldung bleibt, oeffne die App bitte ueber einen lokalen Server oder GitHub Pages.</p>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Hauptnavigation">
+    <a href="#/" data-route="/">Heute</a>
+    <a href="#/topics" data-route="/topics">Themen</a>
+    <a href="#/flashcards" data-route="/flashcards">Karten</a>
+    <a href="#/report" data-route="/report">Bericht</a>
+    <a href="#/progress" data-route="/progress">Fortschritt</a>
+  </nav>
+
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>

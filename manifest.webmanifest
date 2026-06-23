@@ -1,0 +1,25 @@
+{
+  "name": "PflegeLernen",
+  "short_name": "PflegeLernen",
+  "description": "Lern-App fuer Pflege-Themen mit Karteikarten, Quiz, Pflegebericht-Training und lokal gespeichertem Fortschritt.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
