@@ -508,3 +508,85 @@ textarea {
     box-shadow: var(--shadow);
   }
 }
+/* Automatischer Darkmode fuer iPhone, iPad und Browser */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --bg: #0f172a;
+    --surface: #111827;
+    --surface-soft: #1f2937;
+    --text: #f8fafc;
+    --muted: #cbd5e1;
+    --border: #334155;
+    --primary: #60a5fa;
+    --primary-soft: rgba(96, 165, 250, 0.16);
+    --danger: #f87171;
+    --success: #4ade80;
+    --warning: #facc15;
+    --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .app-shell,
+  .card,
+  .topic-card,
+  .progress-card,
+  .quiz-card,
+  .flashcard,
+  .report-card,
+  .panel,
+  .bottom-nav {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+  }
+
+  .muted,
+  .subtitle,
+  .hint,
+  .small-text,
+  .meta {
+    color: var(--muted);
+  }
+
+  button,
+  .button,
+  .nav-button,
+  .tab-button {
+    background: var(--surface-soft);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  button.primary,
+  .button.primary,
+  .active,
+  .nav-button.active {
+    background: var(--primary);
+    color: #0f172a;
+    border-color: var(--primary);
+  }
+
+  input,
+  textarea,
+  select {
+    background: #020617;
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  textarea::placeholder,
+  input::placeholder {
+    color: #94a3b8;
+  }
+
+  a {
+    color: var(--primary);
+  }
+}
