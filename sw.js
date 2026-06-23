@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pflege-lernen-v1.1.1-final-darkmode';
+const CACHE_NAME = 'pflege-lernen-v1.1.1-final-darkmode-Autosave';
 const CORE_ASSETS = [
   './',
   './index.html',
