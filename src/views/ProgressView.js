@@ -12,8 +12,7 @@ export class ProgressView extends BaseView {
     stack.append(this.card([
       createElement('p', { className: 'eyebrow', text: 'Fortschritt' }),
       createElement('h2', { text: `${overall}% Gesamtfortschritt` }),
-      createElement('p', { className: 'lead', text: 'Dein Lernstand wird auf diesem Gerät gespeichert. Für iPhone und iPad separat bitte regelmäßig Backup exportieren/importieren.' }),
-      this.progressBar(overall),
+createElement('p', { className: 'lead', text: 'Dein Lernstand wird automatisch auf diesem Gerät gespeichert. Export/Import brauchst du nur, wenn du den Stand auf ein anderes Gerät übertragen oder zusätzlich sichern möchtest.' }),      this.progressBar(overall),
       createElement('p', { className: 'notice', text: `Letzte Speicherung: ${formatDateTime(state.updatedAt)}` })
     ]));
 
